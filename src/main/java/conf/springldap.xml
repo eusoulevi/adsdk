@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ldap="http://www.springframework.org/schema/ldap"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap-2.0.xsd">
+	
+    <bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+        <!--        url do ApacheDS-->
+        <property name="url" value="ldap://127.0.0.1:10389"/>
+<!--                base do ApacheDS-->
+        <property name="base" value="DC=cajuinabits,DC=org"/>
+        <property name="anonymousReadOnly" value="true"/>
+<!--                usuário com perfil de administrador do ApacheDS-->
+<!--        <property name="userDn" value="cn=admin,dc=ime,dc=usp,dc=br"/>-->
+<!--                password da administrador do ApacheDS        -->
+<!--        <property name="password" value="secret"/>-->
+<!--                Modo de autenticação do ApacheDS        -->
+        <property name="baseEnvironmentProperties">
+            <map>
+                <entry key="java.naming.security.authentication" value="simple"/>
+            </map>
+        </property>
+        <property name="referral" value="follow"/>
+    </bean>
+
+    <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSource"/>
+	</bean>
+    
+	<bean id="ldapDao" class="org.cajuinabits.adsdk.core.dao.LdapDaoImpl">
+		<property name="ldapOperations" ref="ldapTemplate"/>
+	</bean>
+	
+<!--    <bean id="factory" class="org.cajuinabits.adsdk.core.util.LdapOperationsFactory"/>-->
+<!--    <bean id="ldapDao" factory-bean="factory" factory-method="getInstanceLdapOperations">-->
+<!--    </bean>-->
+</beans>

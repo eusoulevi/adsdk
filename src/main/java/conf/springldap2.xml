@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ldap="http://www.springframework.org/schema/ldap"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap.xsd">
+	
+    <bean id="contextSource"
+          class="org.springframework.ldap.core.support.LdapContextSource" scope="singleton">
+        
+<!--        url do ApacheDS-->
+        <property name="url" value="ldap://127.0.0.1:10389"/>
+<!--                base do ApacheDS-->
+        <property name="base" value="DC=cajuinabits,DC=org"/>
+<!--                usuário com perfil de administrador do ApacheDS-->
+        <property name="userDn" value="uid=admin,ou=system"/>
+<!--                password da administrador do ApacheDS        -->
+        <property name="password" value="secret"/>
+<!--                Modo de autenticação do ApacheDS        -->
+        <property name="baseEnvironmentProperties">
+            <map>
+<!--                 "none", "simple", "sasl_mech", "sasl_mech"-->
+                <entry key="java.naming.security.authentication" value="simple"/>
+            </map>
+        </property>
+        
+<!--        url do Active Directory (Windows Server 2008 r2)
+        <property name="url" value="ldaps://tjpithe.local:636"/>
+                base do Active Directory        
+        <property name="base" value="OU=INTRANET,DC=tjpithe,DC=local"/>
+                usuário com perfil de administrador do Active Directory
+        <property name="userDn" value="CN=stic.intranet,OU=SERVICE,OU=INTRANET,DC=tjpithe,DC=local"/>
+                password da administrador do Active Directory
+        <property name="password" value="1q2w3e!Q@W#E"/>
+                Modo de autenticação do Active Directory        
+        <property name="baseEnvironmentProperties">
+            <map>
+                <entry key="java.naming.security.authentication" value="strong"/>
+            </map>
+        </property>-->
+
+        <property name="referral" value="follow"/>
+    </bean>
+
+    <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSource"/>
+	</bean>
+	<bean id="ldapDao" class="org.cajuinabits.adsdk.core.dao.LdapDaoImpl">
+		<property name="ldapTemplate" ref="ldapTemplate"/>
+	</bean>
+	<bean id="ldapUser" class="org.cajuinabits.adsdk.core.dao.LdapUserDaoImpl">
+		<property name="ldapTemplate" ref="ldapTemplate"/>
+	</bean>
+</beans>

@@ -1,0 +1,20 @@
+dn: dc=ime,dc=usp,dc=br
+objectClass: domain
+dc: ime
+
+dn: cn=admin,dc=ime,dc=usp,dc=br
+objectClass: organizationalRole
+objectClass: simpleSecurityObject
+cn: admin
+description: Administrador do LDAP
+userPassword: {CRYPT}NHiC2OYs6eym2
+
+dn: ou=Users,dc=ime,dc=usp,dc=br
+objectClass: organizationalUnit
+ou: Users
+description: Usuários da organização
+
+dn: ou=Groups,dc=ime,dc=usp,dc=br
+objectClass: organizationalUnit
+ou: Groups
+description: Grupos do sistema
